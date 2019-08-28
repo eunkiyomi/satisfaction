@@ -18,4 +18,6 @@ urlpatterns = [
 
     # ex: /praises/delete/3
     path('delete/<int:praise_id>/', views.delete, name='delete'),
+
+    path('login/', views.login, name='login')
 ]

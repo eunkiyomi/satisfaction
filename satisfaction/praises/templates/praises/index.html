@@ -12,8 +12,14 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
     </head>
     <body>
+        {% load socialaccount %}
+        {% if user.is_authenticated %}
+        <h3 class="ui center aligned header" id="user-header"><a href="/">@ {{user}} </a></h3>
+        <div class="ui section divider"></div>
+        {% endif %}
+
         <h1 class="ui center aligned header">Bless you, my dear</h1>
-        <h3 class="ui center aligned header"><a href="#">{{date}}</a></h3>
+        <h3 class="ui center aligned header" id="date-header"><a href="#">{{date}}</a></h3>
 
         <div class="ui text container" id="date-picker">
             <div class="ui centered grid">
@@ -54,14 +60,29 @@
         </div>
 
         <footer>
-            <div class="ui container"><p>Love, stay with me. @ppyap</p></div>
+            <div class="ui container">
+                <div class="ui stackable grid">
+                    <div class="two column row">
+                        <div class="left floated column">
+                            <p>Love, stay with me. @ppyap</p>
+                        </div>
+                        <div class="right floated right aligned column">
+                            <a href="/accounts/logout">logout</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </footer>
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
 
         <style media="screen">
             h1.ui.center.header {
-                margin-top: 3em;
+                margin-top: 1.7em;
+            }
+            #user-header {
+                margin-top: 0.5em;
+                margin-bottom: -1em;
             }
             footer {
                position: absolute;
@@ -97,7 +118,7 @@
                 }
             });
 
-            $('h3').click(function() {
+            $('#date-header').click(function() {
                 $('#date-picker').toggle();
             });
         </script>
