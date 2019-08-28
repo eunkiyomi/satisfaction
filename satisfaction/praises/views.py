@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.urls import reverse
 
@@ -35,4 +35,11 @@ def new(request):
 
     return HttpResponseRedirect(reverse("praises:index",
                                 kwargs={'date_text': date.strftime("%Y%m%d")}))
-    # return HttpResponse("This is test")
+
+
+def delete(request, praise_id):
+    p = get_object_or_404(Praise, pk=praise_id)
+    date = timezone.localtime(p.pub_date)
+    p.delete()
+    return HttpResponseRedirect(reverse("praises:index",
+                                kwargs={'date_text': date.strftime("%Y%m%d")}))

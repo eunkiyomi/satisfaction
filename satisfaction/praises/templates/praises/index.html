@@ -16,7 +16,13 @@
             <div class="ui segments">
                 {% if praise_list %}
                     {% for praise in praise_list %}
-                        <div class="ui segment"><i class="heart icon"></i> {{praise.praise_text}}</div>
+                        <div class="ui segment">
+                            <form class="" action="{% url 'praises:delete' praise.id %}" method="post">
+                                {% csrf_token %}
+                                <i class="heart icon"></i> {{praise.praise_text}}
+                                <button type="submit" class="ui right floated circular basic compact icon button"><i class="times icon"></i></button>
+                            </form>
+                        </div>
                     {% endfor %}
                 {% else %}
                     <div class="ui segment">No praise yet. 😂</div>
