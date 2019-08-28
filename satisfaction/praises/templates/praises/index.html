@@ -6,12 +6,21 @@
 
         <title>Bless you, my dear</title>
 
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'praises/datepicker.min.css' %}">
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
     </head>
     <body>
         <h1 class="ui center aligned header">Bless you, my dear</h1>
-        <h3 class="ui center aligned header">{{date}}</h3>
+        <h3 class="ui center aligned header"><a href="#">{{date}}</a></h3>
+
+        <div class="ui text container" id="date-picker">
+            <div class="ui centered grid">
+                <div class="datepicker-div"></div>
+            </div>
+        </div>
+
         <div class="ui text container">
             <div class="ui segments">
                 {% if praise_list %}
@@ -65,6 +74,32 @@
                margin-top: 0;
                margin-bottom: 0;
             }
+            #date-picker div.ui.centered.grid {
+                margin-top: 1em;
+                margin-bottom: 2em;
+            }
+            #date-picker {
+                display: none;
+            }
+            a {
+                color: rgba(0,0,0,.87);
+            }
         </style>
+
+        <script src="{% static 'praises/datepicker.min.js' %}" type="text/javascript"></script>
+        <script src="{% static 'praises/datepicker.en.js' %}" type="text/javascript"></script>
+        <script type="text/javascript">
+            $('.datepicker-div').datepicker({
+                language: 'en',
+                dateFormat: 'yyyy mm dd',
+                onSelect: function(str, date, instance) {
+                    window.location.href = "{% url 'praises:index' %}" + str.replace(/ /gi, "");
+                }
+            });
+
+            $('h3').click(function() {
+                $('#date-picker').toggle();
+            });
+        </script>
     </body>
 </html>
