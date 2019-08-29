@@ -46,9 +46,9 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.naver',
+    'allauth.socialaccount.providers.google',
 
     'praises.apps.PraisesConfig',
-    'accounts.apps.AccountsConfig',
 ]
 
 SITE_ID = 1
