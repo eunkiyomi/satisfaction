@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="{% static 'praises/datepicker.min.css' %}">
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+        <script type="text/javascript" src="https://momentjs.com/downloads/moment.min.js"></script>
     </head>
     <body>
         {% load socialaccount %}
@@ -105,19 +106,37 @@
             #date-picker {
                 display: none;
             }
+            #date-picker .recorded-date {
+                font-weight: bold;
+            }
+
             a {
                 color: rgba(0,0,0,.87);
             }
         </style>
 
         <script src="{% static 'praises/datepicker.min.js' %}" type="text/javascript"></script>
-        <script src="{% static 'praises/datepicker.en.js' %}" type="text/javascript"></script>
+        <script src="{% static 'praises/datepicker.ko.js' %}" type="text/javascript"></script>
         <script type="text/javascript">
+            var recoredDates = {{ recored_dates|safe }};
+            console.log(recoredDates);
+
+
             $('.datepicker-div').datepicker({
-                language: 'en',
+                language: 'ko',
                 dateFormat: 'yyyy mm dd',
                 onSelect: function(str, date, instance) {
                     window.location.href = "{% url 'praises:index' %}" + str.replace(/ /gi, "");
+                },
+                onRenderCell: function (date, cellType) {
+                    var currentDate = moment(date).format('YYYYMMDD');
+                    console.log(currentDate);
+                    // Add extra element, if `eventDates` contains `currentDate`
+                    if (cellType == 'day' && recoredDates.indexOf(currentDate) != -1) {
+                        return {
+                            classes: 'recorded-date'
+                        }
+                    }
                 }
             });
 

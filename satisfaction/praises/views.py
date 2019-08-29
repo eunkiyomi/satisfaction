@@ -8,19 +8,19 @@ from datetime import datetime
 from .models import Praise
 
 # Create your views here.
-def index(request, date_text=timezone.localtime().strftime("%Y%m%d")):
+def index(request, date_text=datetime.now().strftime("%Y%m%d")):
     if (not request.user.is_authenticated):
         return HttpResponseRedirect(reverse("praises:login"))
-
-    # latest_praise_list = Praise.objects.order_by('-pub_date')[:5]
 
     user_praises = Praise.objects.filter(author=request.user)
 
     date = datetime.strptime(str(date_text), "%Y%m%d").date()
     praise_list = user_praises.filter(pub_date__date=date)
 
+    recorded_dates = list(set(map(lambda p: p.pub_date.strftime("%Y%m%d"), user_praises)))
+
     context = {
-        # 'latest_praise_list': latest_praise_list,
+        'recored_dates': recorded_dates,
         'praise_list': praise_list,
         'date': date.strftime("%Y.%m.%d")
     }
@@ -33,18 +33,18 @@ def detail(request, praise_id):
 def new(request):
     praise_text = request.POST['praise_text']
     date_text = request.POST['date_text']
-    date = datetime.strptime(str(date_text), "%Y.%m.%d")
+    date = datetime.strptime(date_text, "%Y%m%d")
 
     p = Praise(praise_text=praise_text, pub_date=date, author=request.user)
     p.save()
 
     return HttpResponseRedirect(reverse("praises:index",
-                                kwargs={'date_text': date.strftime("%Y%m%d")}))
+                                kwargs={'date_text': date_text}))
 
 
 def delete(request, praise_id):
     p = get_object_or_404(Praise, pk=praise_id)
-    date = timezone.localtime(p.pub_date)
+    date = p.pub_date
 
     if (p.author == request.user):
         p.delete()
