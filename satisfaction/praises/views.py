@@ -33,13 +33,13 @@ def detail(request, praise_id):
 def new(request):
     praise_text = request.POST['praise_text']
     date_text = request.POST['date_text']
-    date = datetime.strptime(date_text, "%Y%m%d")
+    date = datetime.strptime(date_text, "%Y.%m.%d")
 
     p = Praise(praise_text=praise_text, pub_date=date, author=request.user)
     p.save()
 
     return HttpResponseRedirect(reverse("praises:index",
-                                kwargs={'date_text': date_text}))
+                                kwargs={'date_text': date.strftime("%Y%m%d")}))
 
 
 def delete(request, praise_id):
