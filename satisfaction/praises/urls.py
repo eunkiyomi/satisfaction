@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from . import views
 
@@ -8,7 +8,7 @@ urlpatterns = [
     path('', views.index, name='index'),
 
     # ex: /praises/20190828
-    path('<int:date_text>/', views.index, name='index'),
+    re_path(r'^(?P<date_text>\d{8})/$', views.index, name='index'),
 
     # ex: /praises/5/
     # path('<int:praise_id>/', views.detail, name='detail'),
@@ -22,5 +22,7 @@ urlpatterns = [
     path('login/', views.login, name='login'),
 
     path('change-id/', views.change_id, name='change_id'),
-    path('set-id/', views.set_id, name='set_id')
+    path('set-id/', views.set_id, name='set_id'),
+
+    re_path(r'^(?P<date_text>\d{8})/photo/$', views.set_photo, name='set_photo')
 ]

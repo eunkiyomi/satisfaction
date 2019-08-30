@@ -19,6 +19,14 @@ class Praise(models.Model):
     def was_published_recently(self):
         return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
 
+class Photo(models.Model):
+    pub_date = models.DateTimeField('date published')
+    photo = models.ImageField(blank=True)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "Photo for " + self.pub_date.strftime("%Y%m%d")
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

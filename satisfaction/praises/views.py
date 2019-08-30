@@ -5,8 +5,8 @@ from django.urls import reverse
 
 from datetime import datetime
 
-from .models import Praise
-from .models import Profile
+from .models import Praise, Profile, Photo
+from .forms import PhotoForm
 from django.contrib.auth.models import User
 
 # Create your views here.
@@ -20,15 +20,28 @@ def index(request, date_text=datetime.now().strftime("%Y%m%d")):
 
     user_praises = Praise.objects.filter(author=request.user)
 
-    date = datetime.strptime(str(date_text), "%Y%m%d").date()
+    date = datetime.strptime(date_text, "%Y%m%d").date()
     praise_list = user_praises.filter(pub_date__date=date)
 
     recorded_dates = list(set(map(lambda p: p.pub_date.strftime("%Y%m%d"), user_praises)))
 
+    photoURL = ''
+    photo_exists = False
+
+    photo = Photo.objects.filter(author=request.user).filter(pub_date__date=date)
+    if photo.exists():
+        photo = photo.last()
+        photo_exists = True
+    else:
+        photo_exists = False
+
     context = {
+        'photo_exists': photo_exists,
+        'photo': photo,
         'recored_dates': recorded_dates,
         'praise_list': praise_list,
-        'date': date.strftime("%Y.%m.%d")
+        'date': date.strftime("%Y.%m.%d"),
+        'date_in_url': date.strftime("%Y%m%d")
     }
 
     return render(request, 'praises/index.html', context)
@@ -39,13 +52,13 @@ def detail(request, praise_id):
 def new(request):
     praise_text = request.POST['praise_text']
     date_text = request.POST['date_text']
-    date = datetime.strptime(date_text, "%Y.%m.%d")
+    date = datetime.strptime(date_text, "%Y%m%d")
 
     p = Praise(praise_text=praise_text, pub_date=date, author=request.user)
     p.save()
 
     return HttpResponseRedirect(reverse("praises:index",
-                                kwargs={'date_text': date.strftime("%Y%m%d")}))
+                                kwargs={'date_text': date_text}))
 
 
 def delete(request, praise_id):
@@ -75,3 +88,20 @@ def set_id(request):
         # return HttpResponse("We just change your id to" + new_nickname)
 
     return HttpResponseRedirect(reverse("praises:index"))
+
+def set_photo(request, date_text):
+    if request.method == 'POST':
+        form = PhotoForm(request.POST, request.FILES)
+        if form.is_valid():
+            photo = form.save(commit=False)
+            photo.pub_date = datetime.strptime(date_text, "%Y%m%d")
+            photo.author = request.user
+            photo.save()
+
+            return HttpResponseRedirect(reverse("praises:index", kwargs={'date_text': date_text}))
+
+    context = {
+        'date': date_text,
+        'form': PhotoForm()
+    }
+    return render(request, 'praises/upload_photo.html', context)

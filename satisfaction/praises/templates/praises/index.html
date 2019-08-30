@@ -20,7 +20,15 @@
         {% endif %}
 
         <h1 class="ui center aligned header">Bless you, my dear</h1>
-        <h3 class="ui center aligned header" id="date-header"><a href="#">{{date}}</a></h3>
+
+        {% if photo_exists %}
+        <h3 class="ui center aligned header"><img src="{{photo.photo.url}}" >
+        {% endif %}
+
+        <h3 class="ui center aligned header">
+            <a href="#" id="date-header">{{date}}</a>
+            <a href="{% url 'praises:set_photo' date_in_url %}" id="set-photo"> <i class="camera retro icon"></i> </a>
+        </h3>
 
         <div class="ui text container" id="date-picker">
             <div class="ui centered grid">
@@ -51,7 +59,7 @@
 
                         <div class="ui action input">
                             <input type="text" name="praise_text" size="30" placeholder="What is it?">
-                            <input type="hidden" name="date_text" value="{{date}}">
+                            <input type="hidden" name="date_text" value="{{date_in_url}}">
                             <button type="submit" class="ui button">Add</button>
                         </div>
                     </form>
