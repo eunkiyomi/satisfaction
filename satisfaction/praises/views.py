@@ -6,11 +6,17 @@ from django.urls import reverse
 from datetime import datetime
 
 from .models import Praise
+from .models import Profile
+from django.contrib.auth.models import User
 
 # Create your views here.
 def index(request, date_text=datetime.now().strftime("%Y%m%d")):
     if (not request.user.is_authenticated):
         return HttpResponseRedirect(reverse("praises:login"))
+
+    if (request.user.profile.nickname == ''):
+        # return HttpResponse("you have to set your id first")
+        return HttpResponseRedirect(reverse("praises:change_id"))
 
     user_praises = Praise.objects.filter(author=request.user)
 
@@ -54,3 +60,18 @@ def delete(request, praise_id):
 
 def login(request):
     return render(request, 'praises/login.html')
+
+def change_id(request):
+    return render(request, 'praises/change_id.html')
+
+def set_id(request):
+    new_nickname = request.POST['id_text']
+
+    if (Profile.objects.filter(nickname=new_nickname).exists()):
+        return HttpResponse("It already exists! please use other id.")
+    else:
+        request.user.profile.nickname = new_nickname
+        request.user.save()
+        # return HttpResponse("We just change your id to" + new_nickname)
+
+    return HttpResponseRedirect(reverse("praises:index"))

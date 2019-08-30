@@ -17,11 +17,19 @@
         <span>{{ user }}님이 로그인중입니다.</span>
         {% endif %} -->
 
-        <h1 class="ui center aligned header">Satisfaction</h1>
-        <h3 class="ui center aligned header"><a href="#">{{date}}</a></h3>
+        <h1 class="ui center aligned header">Hi! Set your ID first.. :D</h1>
 
-        <div class="ui text container">
-            <a class="ui button fluid" href="{% provider_login_url 'google' method='oauth2' %}">Google 아이디로 로그인</a>
+        <div class="ui text container center aligned">
+            <form method="post" action="{% url 'praises:set_id' %}">
+                {% csrf_token %}
+                <i class="heart icon"></i>
+
+                <div class="ui labeled action input">
+                    <div class="ui label">@</div>
+                    <input type="text" name="id_text" placeholder="Cool Name...">
+                    <button type="submit" class="ui button">Go</button>
+                </div>
+            </form>
         </div>
 
         <footer>
