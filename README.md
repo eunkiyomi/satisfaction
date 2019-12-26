@@ -12,3 +12,7 @@ After edit, use
 
 After push, go to server and
 - `git pull origin master`, then files in server will be updated.
+
+## Use Local Server
+Run `runserver` in *satisfaction/manage.py*
+- `python3 manage.py runserver`, then local server will run at port 8000.
