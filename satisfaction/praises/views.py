@@ -29,11 +29,9 @@ def index(request, date_text=datetime.now().strftime("%Y%m%d")):
     photo_exists = False
 
     photo = Photo.objects.filter(author=request.user).filter(pub_date__date=date)
-    if photo.exists():
+    photo_exists = photo.exists()
+    if photo_exists:
         photo = photo.last()
-        photo_exists = True
-    else:
-        photo_exists = False
 
     context = {
         'photo_exists': photo_exists,
@@ -90,17 +88,26 @@ def set_id(request):
     return HttpResponseRedirect(reverse("praises:index"))
 
 def set_photo(request, date_text):
+    date = datetime.strptime(date_text, "%Y%m%d")
+
     if request.method == 'POST':
         form = PhotoForm(request.POST, request.FILES)
         if form.is_valid():
             photo = form.save(commit=False)
-            photo.pub_date = datetime.strptime(date_text, "%Y%m%d")
+            photo.pub_date = date
             photo.author = request.user
             photo.save()
 
             return HttpResponseRedirect(reverse("praises:index", kwargs={'date_text': date_text}))
 
+    photo = Photo.objects.filter(author=request.user).filter(pub_date__date=date)
+    photo_exists = photo.exists()
+    if photo_exists:
+        photo = photo.last()
+
     context = {
+        'photo_exists': photo_exists,
+        'photo': photo,
         'date': date_text,
         'form': PhotoForm()
     }

@@ -20,7 +20,9 @@
         <h1 class="ui center aligned header">This is a picture for {{date}} :D</h1>
 
         <div class="ui text container center aligned" id="body-div">
-            <h3 class="ui center aligned header"><img id="photo-view"></h3>
+            <h3 class="ui center aligned header">
+                <img id="photo-view" {% if photo_exists %} src="{{photo.photo.url}}" {% endif %}>
+            </h3>
             <form class="ui form" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <!-- <i class="camera retro icon"></i> -->
