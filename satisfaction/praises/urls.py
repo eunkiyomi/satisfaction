@@ -24,5 +24,7 @@ urlpatterns = [
     path('change-id/', views.change_id, name='change_id'),
     path('set-id/', views.set_id, name='set_id'),
 
-    re_path(r'^(?P<date_text>\d{8})/photo/$', views.set_photo, name='set_photo')
+    re_path(r'^(?P<date_text>\d{8})/photo/$', views.set_photo, name='set_photo'),
+
+    path('backup/', views.backup, name='backup')
 ]

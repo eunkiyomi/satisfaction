@@ -15,7 +15,7 @@
     <body>
         {% load socialaccount %}
         {% if user.is_authenticated %}
-        <h3 class="ui center aligned header" id="user-header"><a href="{% url 'praises:change_id' %}">@ {{user.profile.nickname}} </a></h3>
+        <h3 class="ui center aligned header" id="user-header"><a href="{% url 'praises:index' %}">@ {{user.profile.nickname}} </a></h3>
         <div class="ui section divider"></div>
         {% endif %}
 
@@ -76,6 +76,10 @@
                             <p>Love, stay with me. @ppyap</p>
                         </div>
                         <div class="right floated right aligned column">
+                            <a href="{% url 'praises:change_id' %}">change id</a>
+                            /
+                            <a href="/backup">backup</a>
+                            /
                             <a href="/accounts/logout">logout</a>
                         </div>
                     </div>

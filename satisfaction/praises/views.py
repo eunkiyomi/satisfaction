@@ -2,8 +2,10 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.urls import reverse
+from django.forms.models import model_to_dict
 
 from datetime import datetime
+from operator import itemgetter
 
 from .models import Praise, Profile, Photo
 from .forms import PhotoForm
@@ -112,3 +114,19 @@ def set_photo(request, date_text):
         'form': PhotoForm()
     }
     return render(request, 'praises/upload_photo.html', context)
+
+def backup(request):
+    praises = Praise.objects.filter(author=request.user)
+    backup_list = list(praises.values('pub_date', 'praise_text'))
+    backup_list.sort(key=itemgetter('pub_date'))
+
+    str = ""
+    date = datetime(1980, 1, 1, 0, 0)
+    for praise in backup_list:
+        if praise['pub_date'] != date:
+            str += "## " + praise['pub_date'].strftime("%Y%m%d") + "\n"
+            date = praise['pub_date']
+
+        str += "- " + praise['praise_text'] + "\n"
+
+    return render(request, 'praises/backup.html', {"text": str})
