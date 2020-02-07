@@ -130,3 +130,6 @@ def backup(request):
         str += "- " + praise['praise_text'] + "\n"
 
     return render(request, 'praises/backup.html', {"text": str})
+
+def settings(request):
+    return render(request, 'praises/settings.html')
