@@ -11,12 +11,20 @@ from .models import Praise, Profile, Photo
 from .forms import PhotoForm
 from django.contrib.auth.models import User
 
+import re
+
+
 # Create your views here.
-def index(request, date_text=datetime.now().strftime("%Y%m%d")):
-    if (not request.user.is_authenticated):
+
+def index(request):
+    return HttpResponseRedirect(reverse("praises:date",
+                                kwargs={'date_text': datetime.now().strftime("%Y%m%d")}))
+
+def date_view(request, date_text=datetime.now().strftime("%Y%m%d")):
+    if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("praises:login"))
 
-    if (request.user.profile.nickname == ''):
+    if request.user.profile.nickname == '':
         # return HttpResponse("you have to set your id first")
         return HttpResponseRedirect(reverse("praises:change_id"))
 
@@ -57,7 +65,7 @@ def new(request):
     p = Praise(praise_text=praise_text, pub_date=date, author=request.user)
     p.save()
 
-    return HttpResponseRedirect(reverse("praises:index",
+    return HttpResponseRedirect(reverse("praises:date",
                                 kwargs={'date_text': date_text}))
 
 
@@ -65,10 +73,10 @@ def delete(request, praise_id):
     p = get_object_or_404(Praise, pk=praise_id)
     date = p.pub_date
 
-    if (p.author == request.user):
+    if p.author == request.user:
         p.delete()
 
-    return HttpResponseRedirect(reverse("praises:index",
+    return HttpResponseRedirect(reverse("praises:date",
                                 kwargs={'date_text': date.strftime("%Y%m%d")}))
 
 def login(request):
@@ -80,8 +88,11 @@ def change_id(request):
 def set_id(request):
     new_nickname = request.POST['id_text']
 
-    if (Profile.objects.filter(nickname=new_nickname).exists()):
-        return HttpResponse("It already exists! please use other id.")
+    if len(new_nickname) > 30:
+        return render_message(request, "Too long! Please use other id...:O")
+
+    if Profile.objects.filter(nickname=new_nickname).exists():
+        return render_message(request, "It already exists! please use other id.")
     else:
         request.user.profile.nickname = new_nickname
         request.user.save()
@@ -100,7 +111,7 @@ def set_photo(request, date_text):
             photo.author = request.user
             photo.save()
 
-            return HttpResponseRedirect(reverse("praises:index", kwargs={'date_text': date_text}))
+            return HttpResponseRedirect(reverse("praises:date", kwargs={'date_text': date_text}))
 
     photo = Photo.objects.filter(author=request.user).filter(pub_date__date=date)
     photo_exists = photo.exists()
@@ -133,3 +144,6 @@ def backup(request):
 
 def settings(request):
     return render(request, 'praises/settings.html')
+
+def render_message(request, msg):
+    return render(request, 'praises/message.html', {"msg": msg})

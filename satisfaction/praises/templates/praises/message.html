@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 
-{% load socialaccount %}
-
 <html>
     <head>
         <meta charset="utf-8">
@@ -18,20 +16,10 @@
         <h3 class="ui center aligned header" id="user-header"><a href="{% url 'praises:index' %}">@ {{user.profile.nickname}} </a></h3>
         <div class="ui section divider"></div>
 
-        <h1 class="ui center aligned header">Hi! Set your ID first.. :D</h1>
+        <h1 class="ui center aligned header">{{msg}}</h1>
 
         <div class="ui text container center aligned" id="body-div">
-            <form method="post" action="{% url 'praises:set_id' %}">
-                {% csrf_token %}
-                <i class="heart icon"></i>
 
-
-                <div class="ui labeled action input">
-                    <div class="ui label">@</div>
-                    <input type="text" name="id_text" maxlength="30" placeholder="Cool Name...">
-                    <button type="submit" class="ui button">Go</button>
-                </div>
-            </form>
         </div>
 
         <footer>

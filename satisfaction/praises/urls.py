@@ -8,7 +8,7 @@ urlpatterns = [
     path('', views.index, name='index'),
 
     # ex: /praises/20190828
-    re_path(r'^(?P<date_text>\d{8})/$', views.index, name='index'),
+    re_path(r'^(?P<date_text>\d{8})/$', views.date_view, name='date'),
 
     # ex: /praises/5/
     # path('<int:praise_id>/', views.detail, name='detail'),
