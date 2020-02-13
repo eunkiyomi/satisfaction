@@ -12,7 +12,9 @@
 [o] id(nickname) limit:
     - unique
     - name length limit
-~~    - character limit ~~
+    ~~- character limit~~
+
 ~~[] Url refactoring for multi-user.~~
 [] Be ready for too big image.
 [] Hide praises at admin page.
+[] Direct log out.

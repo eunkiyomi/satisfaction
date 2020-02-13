@@ -26,12 +26,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #로컬 디렉토리 어디에 저�
 SECRET_KEY = secrets.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = secrets.DEBUG
 
-ALLOWED_HOSTS = [
-    "ec2-15-164-103-158.ap-northeast-2.compute.amazonaws.com",
-    "localhost"
-]
+ALLOWED_HOSTS = secrets.ALLOWED_HOSTS
 
 
 # Application definition
