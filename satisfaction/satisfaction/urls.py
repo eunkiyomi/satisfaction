@@ -20,9 +20,8 @@ from django.conf.urls.static import static
 from django.shortcuts import redirect
 
 urlpatterns = [
-    path('', lambda request: redirect('dontbesad/', permanent=False)),
-    path('dontbesad/admin/', admin.site.urls),
-    path('dontbesad/', include('praises.urls')),
+    path('admin/', admin.site.urls),
+    path('', include('praises.urls')),
     path('accounts/', include('allauth.urls')),
 ]
 

@@ -141,3 +141,7 @@ dmypy.json
 
 backend_files/
 secrets.py
+
+references/
+Satisfaction-*.json
+cloud_sql_proxy
