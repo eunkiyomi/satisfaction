@@ -2,6 +2,8 @@
 Bless you, my dear
 [https://github.com/PPYAPgit/satisfaction]
 
+> https://satisfaction-251312.du.r.appspot.com/
+
 ## How to edit
 We should use *satisfaction-git* directory.
 
@@ -25,6 +27,7 @@ $ pip install -r requirements.txt`
 $ python3 -m venv venv
 $ source venv/bin/activate
 $ python manage.py createsuperuser
+$ python manage.py collectstatic
 $ python manage.py runserver
 ```
 
