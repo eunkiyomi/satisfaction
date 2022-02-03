@@ -4,6 +4,9 @@ Bless you, my dear
 
 > https://satisfaction-251312.du.r.appspot.com/
 
+## Screenshot
+![screenshot](./Screenshot.jpg)
+
 ## How to edit
 We should use *satisfaction-git* directory.
 
